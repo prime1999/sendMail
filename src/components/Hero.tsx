@@ -1,12 +1,38 @@
-import { IoBatteryFullOutline, IoPersonCircleSharp } from "react-icons/io5";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { IoBatteryFullOutline } from "react-icons/io5";
 import { MdOutlineWifi } from "react-icons/md";
 import { BsBarChartFill } from "react-icons/bs";
 import woman from "../assets/images/woman.png";
-import audio from "../assets/images/audio.png";
-import video from "../assets/images/video.png";
 import { heroMessage } from "@/contants/arrays.info";
 
 const Hero = () => {
+	useGSAP(() => {
+		gsap.fromTo(
+			".message",
+			{
+				opacity: 0,
+				yPercent: -50,
+			},
+			{
+				opacity: 1,
+				yPercent: 0,
+				duration: 1.5,
+				stagger: 0.4,
+				delay: 1,
+				// repeat: -1, // Infinite repeat
+				// yoyo: true, // Goes back and forth
+				// repeatDelay: 2,
+				ease: "power1.inOut", // Smooth easing
+			}
+		);
+		gsap.fromTo(
+			".woman",
+			{ opacity: 0, yPercent: 5 },
+			{ opacity: 1, yPercent: 0, duration: 1, ease: "power1.inOut" }
+		);
+	}, []);
+
 	return (
 		<section className="flex items-center justify-between w-8/12 mx-auto mt-8">
 			<div>
@@ -24,7 +50,7 @@ const Hero = () => {
 			</div>
 			<div>
 				<div className="bg-purple-100 rounded-3xl w-[300px] h-[500px] p-1">
-					<div className="relative bg-purple-300 rounded-3xl h-full">
+					<div className="relative bg-purple-300 rounded-3xl h-full overflow-hidden">
 						<div className="flex items-center justify-between w-10/12 mx-auto pt-2">
 							<p className="font-inter font-bold text-xs">10:00</p>
 							<span className="flex rounded-3xl w-[80px] h-5 bg-black"></span>
@@ -34,12 +60,12 @@ const Hero = () => {
 								<IoBatteryFullOutline />
 							</div>
 						</div>
-						<img src={woman} className="absolute bottom-0" />
+						<img src={woman} className="absolute bottom-0 woman" />
 						<div className="absolute left-4 w-11/12 h-12 mx-auto mt-16">
 							{heroMessage.map((file) => (
 								<div
 									key={file.id}
-									className="h-12 glassmorphism border border-gray-300 mt-2"
+									className="message h-12 glassmorphism border border-gray-300 mt-4"
 								>
 									<div className="flex justify-center gap-2 items-center">
 										<img src={file.image} className="w-12" />
