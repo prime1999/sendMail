@@ -128,3 +128,9 @@
 .button-gradient {
 	@apply text-slate-200 bg-gradient-to-br from-[#a885ef] to-[#4811b7] cursor-pointer duration-1000 hover:from-[#4811b7] hover:to-[#a885ef];
 }
+
+.glassmorphism {
+	border-radius: 16px;
+	backdrop-filter: blur(10.1px);
+	-webkit-backdrop-filter: blur(10.1px);
+}
