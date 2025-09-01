@@ -1,7 +1,6 @@
-import Navbar from "@/components/Navbar";
 import { Outlet } from "react-router-dom";
-// import MobileNav from "@/components/MobileNav";
-// import Footer from "@/components/Footer";
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
 
 const RootLayouts = () => {
 	return (
@@ -9,7 +8,7 @@ const RootLayouts = () => {
 			<div className="grow mb-8 pb-20 lg:pb-0">
 				<Navbar />
 				<Outlet />
-				{/* <Footer /> */}
+				<Footer />
 			</div>
 			{/* <MobileNav /> */}
 		</div>

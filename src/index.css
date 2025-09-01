@@ -129,8 +129,23 @@
 	@apply text-slate-200 bg-gradient-to-br from-[#a885ef] to-[#4811b7] cursor-pointer duration-1000 hover:from-[#4811b7] hover:to-[#a885ef];
 }
 
+.phone-img {
+	@apply md:w-[60vw] w-full h-[50vh] md:h-[70vh] rounded-4xl overflow-hidden absolute top-0 md:top-1/2 md:-translate-y-1/2 left-1/2 -translate-x-1/2;
+}
+
+/* @utility abs-center {
+	@apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+} */
+
 .glassmorphism {
 	border-radius: 16px;
 	backdrop-filter: blur(10.1px);
 	-webkit-backdrop-filter: blur(10.1px);
+}
+
+.masked-img {
+	mask-image: url("./assets/images/camera.png");
+	mask-repeat: no-repeat;
+	mask-position: center;
+	mask-size: 50%;
 }
