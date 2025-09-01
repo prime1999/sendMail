@@ -61,7 +61,7 @@ const Hero = () => {
 	}, []);
 
 	return (
-		<section className="hero flex items-center justify-between w-8/12 mx-auto mt-8">
+		<section className="hero flex items-center justify-between w-8/12 mx-auto mt-8 pt-8">
 			<div>
 				<h1 className="title leading-normal font-ubuntu text-4xl">
 					A gift from your <span className="font-semibold">Past,</span> <br />

@@ -121,7 +121,7 @@
 		@apply border-border outline-ring/50;
 	}
 	body {
-		@apply min-h-screen bg-gradient-to-br from-white to-[#d4c2f9] bg-fixed text-foreground;
+		@apply min-h-screen bg-gradient-to-br from-white to-[#d4c2f9] bg-fixed text-foreground overflow-x-clip;
 	}
 }
 

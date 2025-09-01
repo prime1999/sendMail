@@ -4,7 +4,7 @@ import Logo from "./Logo";
 
 const Navbar = () => {
 	return (
-		<nav className="w-full py-2">
+		<nav className="fixed rounded-none z-100 w-full py-2 glassmorphism">
 			<div className="flex items-center justify-between w-8/12 mx-auto">
 				<Logo />
 				<ul className="flex items-center justify-center gap-8  text-sm font-inter font-semibold">
