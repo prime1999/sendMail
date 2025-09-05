@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AppwritecreateUser } from "./AuthActions";
+import { AppwritecreateUser, AppwriteCreateUserSession } from "./AuthActions";
 import { AppwriteCreateUserProfile } from "./StudentAction";
 
 // Custom hook for creating a user
@@ -9,6 +9,24 @@ export const useCreateUser = () => {
 	return useMutation({
 		mutationFn: ({ email, password }: { email: string; password: string }) =>
 			AppwritecreateUser({ email, password }),
+
+		onSuccess: async (data) => {
+			return data;
+			//await queryClient.invalidateQueries({ queryKey: ["user"] });
+		},
+		onError: async (data) => {
+			return data;
+		},
+	});
+};
+
+// Custom hook for creating a user
+export const useLogInUser = () => {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: ({ email, password }: { email: string; password: string }) =>
+			AppwriteCreateUserSession({ email, password }),
 
 		onSuccess: async (data) => {
 			return data;

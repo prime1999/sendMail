@@ -25,12 +25,13 @@ const Register = () => {
 		emailError: "",
 		passwordError: "",
 	});
+	// state to handle the password visibility
 	const [showPassword, setShowPassword] = useState<boolean>(false);
+	// state to handle the checking status of the session state
+	const [checkingStatus, setCheckingStatus] = useState<boolean>(true);
 
 	const { email, password } = formData;
 	const { emailError, passwordError } = errorData;
-
-	const [checkingStatus, setCheckingStatus] = useState<boolean>(true);
 
 	useEffect(() => {
 		const handleLoad = async () => {
