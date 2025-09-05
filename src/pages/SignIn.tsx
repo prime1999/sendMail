@@ -8,6 +8,7 @@ import background from "../assets/images/fromBg.jpg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { checkCurrentSession, GoogleAuth } from "@/lib/actions/AuthActions";
 import { useLogInUser } from "@/lib/actions/QueryActions";
+import FullPageLoader from "@/lib/utils/FullPageLoader";
 
 const SignIn = () => {
 	// react-query hooks
@@ -95,6 +96,7 @@ const SignIn = () => {
 			className="h-screen w-screen bg-cover bg-center"
 			style={{ backgroundImage: `url(${background})` }}
 		>
+			{checkingStatus && <FullPageLoader />}
 			<div className="absolute inset-0 bg-white/70"></div>
 
 			<div className="relative flex items-center justify-center w-full h-full">
