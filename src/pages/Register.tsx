@@ -4,17 +4,19 @@ import { FcGoogle } from "react-icons/fc";
 import { MdOutlineEmail } from "react-icons/md";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { CiLock } from "react-icons/ci";
-import { useUserAuthStatus } from "@/hooks/useAuthStatus";
 import Logo from "@/components/Logo";
 import background from "../assets/images/fromBg.jpg";
-import { GoogleAuth } from "@/lib/actions/AuthActions";
+import { checkCurrentSession, GoogleAuth } from "@/lib/actions/AuthActions";
 import FullPageLoader from "@/lib/utils/FullPageLoader";
 import { useCreateUser } from "@/lib/actions/QueryActions";
 
 const Register = () => {
+	// react query hooks
 	const createUser = useCreateUser();
+	// react-router hooks
 	const location = useLocation();
 	const navigate = useNavigate();
+	// form handling state
 	const [formData, setFormData] = useState<any>({
 		email: "",
 		password: "",
@@ -24,15 +26,22 @@ const Register = () => {
 		passwordError: "",
 	});
 	const [showPassword, setShowPassword] = useState<boolean>(false);
-	const { isLoggedIn, checkingStatus } = useUserAuthStatus();
 
 	const { email, password } = formData;
 	const { emailError, passwordError } = errorData;
 
+	const [checkingStatus, setCheckingStatus] = useState<boolean>(true);
+
 	useEffect(() => {
-		if (isLoggedIn) {
-			navigate("/dashboard");
-		}
+		const handleLoad = async () => {
+			const isLoggedIn = await checkCurrentSession();
+			if (isLoggedIn && isLoggedIn.$id) {
+				navigate("/dashboard");
+			} else {
+				setCheckingStatus(false);
+			}
+		};
+		handleLoad();
 	}, []);
 
 	// function to handle log in with email
@@ -53,14 +62,12 @@ const Register = () => {
 			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 			const passwordRegex = /^.{8,15}$/;
 			if (!emailRegex.test(email)) {
-				console.log("Invalid email address");
 				setErrorData((prev: any) => ({
 					...prev,
 					emailError: "Invalid Email",
 				}));
 			}
 			if (!passwordRegex.test(password)) {
-				console.log("check password");
 				setErrorData((prev: any) => ({
 					...prev,
 					passwordError:
@@ -69,11 +76,10 @@ const Register = () => {
 			}
 
 			if (emailRegex.test(email) && passwordRegex.test(password)) {
-				console.log(formData);
 				// call the react query function
-				const res = createUser.mutate(formData, {
-					onSuccess: (data) => {
-						console.log("User created successfully:", data);
+				createUser.mutate(formData, {
+					onSuccess: () => {
+						navigate("/dashboard");
 					},
 					onError: (error) => {
 						console.error("Error creating user:", error);
@@ -134,7 +140,7 @@ const Register = () => {
 								className="text-xs border px-2 py-1 rounded-md w-full pl-7"
 							/>
 							<MdOutlineEmail className="absolute left-2 top-1.5 text-gray-500" />
-							{errorData.email !== "" && (
+							{emailError !== "" && (
 								<p className="relative font-inter text-[10px] mt-1 text-red-500 font-medium">
 									{errorData.emailError}
 								</p>

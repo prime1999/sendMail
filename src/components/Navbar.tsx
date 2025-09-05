@@ -18,9 +18,12 @@ const Navbar = () => {
 						</Link>
 					))}
 				</ul>
-				<button className="font-inter text-xs font-medium p-2 rounded-md button-gradient">
+				<Link
+					to="/register"
+					className="font-inter text-xs font-medium p-2 rounded-md button-gradient"
+				>
 					Get Started
-				</button>
+				</Link>
 			</div>
 		</nav>
 	);

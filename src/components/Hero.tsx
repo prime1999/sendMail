@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
@@ -10,6 +11,7 @@ import { heroMessage } from "@/contants/arrays.info";
 gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
+	const navigate = useNavigate();
 	// const titleSplit = new SplitText(".title", {
 	// 	type: "chars, words",
 	// });
@@ -71,7 +73,10 @@ const Hero = () => {
 					Write heartfelt messages, goals, or reminders to yourself. Set a date,
 					and your future self will receive them like a time capsule.
 				</p>
-				<button className="button py-2 px-4 button-gradient rounded-md mt-16">
+				<button
+					onClick={() => navigate("/signIn")}
+					className="button py-2 px-4 button-gradient rounded-md mt-16"
+				>
 					Send a mail to future you
 				</button>
 			</div>

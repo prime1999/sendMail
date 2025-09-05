@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AppwritecreateUser } from "./AuthActions";
+import { AppwriteCreateUserProfile } from "./StudentAction";
 
 // Custom hook for creating a user
 export const useCreateUser = () => {
@@ -18,3 +19,18 @@ export const useCreateUser = () => {
 		},
 	});
 };
+
+// // custom hook for creating the user profile
+// export const userCreateUserProfile = () => {
+// 	const queryClient = useQueryClient();
+
+// 	return useMutation({
+// 		mutationFn: (userData: any) => AppwriteCreateUserProfile(userData),
+// 		onSuccess: async (data) => {
+// 			return data;
+// 		},
+// 		onError: async (data) => {
+// 			return data;
+// 		},
+// 	});
+// };

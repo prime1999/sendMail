@@ -1,9 +1,11 @@
-import { Account, Databases, ID, OAuthProvider } from "appwrite";
+import { Account, ID, OAuthProvider, TablesDB } from "appwrite";
 import client from "../appwrite.config";
+import { AppwriteCreateUserProfile } from "./StudentAction";
+import { DBID, USERID } from "@/contants/env.file";
 
 const account = new Account(client);
 
-const databases = new Databases(client);
+const tablesRow = new TablesDB(client);
 
 // function to login/reegister the user with gmail
 export const GoogleAuth = async (currentUrl: string) => {
@@ -22,35 +24,78 @@ export const GoogleAuth = async (currentUrl: string) => {
 // function to check for the current session in the database
 export const checkCurrentSession = async () => {
 	try {
-		// get the current session if any
+		// Get current logged-in user
 		const user = await account.get();
-		console.log(456);
-		console.log(user);
-		if (user && user.$id) {
-			localStorage.setItem("isAuthenticated", "true");
+		if (!user?.$id) return null;
+
+		const userData = {
+			userId: user.$id,
+			name: user.name,
+			email: user.email,
+		};
+
+		// Check if profile exists
+		const existingProfile = await tablesRow
+			.getRow({
+				databaseId: DBID,
+				tableId: USERID,
+				rowId: user.$id,
+			})
+			// If not found, returns null
+			.catch(() => null);
+
+		// Create profile if not found
+		if (!existingProfile) {
+			const newProfile = await AppwriteCreateUserProfile(userData);
+			return newProfile || user;
 		}
-		return user;
+
+		return existingProfile;
 	} catch (error) {
-		console.log(error);
+		console.error("Session check failed:", error);
+		return null;
 	}
 };
 
 // fucntion to create a user account using email and password
-export const AppwritecreateUser = async (userdata: any) => {
+export const AppwritecreateUser = async (userData: any) => {
 	try {
-		console.log(userdata);
-		// create a session using the email ans password
-		const res = await account.create({
+		// create a user auth on Appwrite
+		const user = await account.create({
 			userId: ID.unique(),
-			email: userdata.email,
-			password: userdata.password,
+			email: userData.email,
+			password: userData.password,
 		});
-		if (!res.$id) return { msg: "Wrong User credentials" };
-		// if the session is created then
-		// get the user's documents
-		//const userDoc = await databases.getDocument(DBID, STUDENTID, res.userId);
-		return { msg: "User Authenticated", data: res };
+
+		if (user && user.$id) {
+			// create a user session with the user info
+			const session = await AppwriteCreateUserSession(userData);
+			if (session && session.$id) {
+				return session;
+			}
+		}
+	} catch (error: any) {
+		// check if the error is a user already exist error
+		if (error && error.code === 409) {
+			return { error: "User already exists" };
+		}
+		// else if any other error
+		return { error: "An error occurred when creating user, please try again" };
+	}
+};
+// function to log a user in
+export const AppwriteCreateUserSession = async (userData: any) => {
+	try {
+		// call the funtion to log the user in
+		const res = await account.createEmailPasswordSession({
+			email: userData.email,
+			password: userData.password,
+		});
+		if (res && res.$id) {
+			return res;
+		}
+		return null;
 	} catch (error) {
-		return { msg: "Wrong User credentials" };
+		console.log(error);
 	}
 };
