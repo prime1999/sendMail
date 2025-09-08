@@ -217,3 +217,29 @@
 		margin-top: 0;
 	}
 }
+
+.scrollable-div {
+	/* Firefox scrollbar support */
+	scrollbar-width: thin; /* options: auto, thin, none */
+	scrollbar-color: #d05cf0 transparent; /* thumb color and track color */
+}
+
+/* Chrome, Edge, Safari */
+.scrollable-div::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+.scrollable-div::-webkit-scrollbar-track {
+	background: transparent;
+	border-radius: 4px;
+}
+
+.scrollable-div::-webkit-scrollbar-thumb {
+	background: #d05cf0;
+	border-radius: 4px;
+}
+
+.scrollable-div::-webkit-scrollbar-thumb:hover {
+	background: #d05cf0;
+}

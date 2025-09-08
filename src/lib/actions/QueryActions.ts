@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AppwritecreateUser, AppwriteCreateUserSession } from "./AuthActions";
 import { AppwriteCreateUserProfile } from "./StudentAction";
+import { UploadFileToCloud } from "./FileActions";
 
 // Custom hook for creating a user
 export const useCreateUser = () => {
@@ -35,6 +36,17 @@ export const useLogInUser = () => {
 		onError: async (data) => {
 			return data;
 		},
+	});
+};
+
+// Custom hook for sending for sending a file to cloudinary
+export const useUploadFileToCloud = () => {
+	return useMutation({
+		mutationFn: (data: any) => UploadFileToCloud(data),
+		onSuccess: async (data) => {
+			return data;
+		},
+		onError: async (data) => {},
 	});
 };
 

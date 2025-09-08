@@ -2,6 +2,7 @@ import { FaBell } from "react-icons/fa";
 import { MdOutlineFeedback, MdLogout } from "react-icons/md";
 import Logo from "@/components/Logo";
 import dashboardLady from "../assets/images/dashboardLady.png";
+import UploadForm from "@/components/UploadForm";
 
 const Dashboard = () => {
 	return (
@@ -33,6 +34,9 @@ const Dashboard = () => {
 					Talk to the <br />
 					<span className="font-semibold text-purple-600">Future</span> You
 				</h1>
+			</div>
+			<div className="absolute top-25 right-30">
+				<UploadForm />
 			</div>
 			<div className="relative left-40 top-20 flex flex-col gap-8">
 				<button className="glassmorphism bg-white/20 border border-white/30 p-2 w-9 text-xl text-purple-800 cursor-pointer">
