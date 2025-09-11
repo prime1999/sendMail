@@ -11,6 +11,7 @@ import Register from "./pages/Register";
 import SignIn from "./pages/SignIn";
 import PrivateRoutes from "./components/PrivateRoutes";
 import Dashboard from "./pages/Dashboard";
+import Forgotpassword from "./pages/Forgotpassword";
 
 const queryClient = new QueryClient();
 
@@ -23,18 +24,12 @@ const App = () => {
 					<Route path="/dashboard" element={<PrivateRoutes />}>
 						<Route path="/dashboard" element={<Dashboard />} />
 					</Route>
-					{/* <Route path="/courses" element={<PrivateUserRoutes />}>
-						<Route path="/courses" element={<Courses />} />
-					</Route>
-					<Route path="/tasks" element={<Tasks />}>
-						<Route path="/tasks" element={<Tasks />} />
-					</Route> */}
 				</Route>
 
 				{/* <Route path="/register" element={<SignUp />} />*/}
 				<Route path="/signIn" element={<SignIn />} />
 				<Route path="/register" element={<Register />} />
-				{/* <Route path="/forgotPassword" element={<Forgotpassword />} /> */}
+				<Route path="/forgotPassword" element={<Forgotpassword />} />
 			</>
 		)
 	);

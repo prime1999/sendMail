@@ -114,3 +114,34 @@ export const AppwriteLogUserOut = async () => {
 		return error;
 	}
 };
+
+// function to send link for the user's password recovery
+export const AppwriteForotpassword = async (email: string) => {
+	try {
+		// call the forgot password function
+		const token = await account.createRecovery({
+			email: email,
+			url: "http://localhost:5173/forgotpassword",
+		});
+		console.log(token);
+		return token;
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+// funciton to confirm the password recovery link
+export const AppwriteConfirmPasswordRecovery = async (data: any) => {
+	try {
+		// call the function
+		const token = await account.updateRecovery({
+			userId: data.userId,
+			secret: data.secret,
+			password: data.password,
+		});
+		console.log(token);
+		return token;
+	} catch (error) {
+		console.log(error);
+	}
+};

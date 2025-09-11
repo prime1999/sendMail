@@ -1,7 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
+	AppwriteConfirmPasswordRecovery,
 	AppwritecreateUser,
 	AppwriteCreateUserSession,
+	AppwriteForotpassword,
 	AppwriteLogUserOut,
 } from "./AuthActions";
 import { AppwriteCreateUserProfile } from "./StudentAction";
@@ -64,6 +66,33 @@ export const useSendMailToAppwrite = () => {
 			return data;
 		},
 		onError: async (data) => {},
+	});
+};
+
+// custom hook to call the forgot password fucntion
+export const useForgotPassword = () => {
+	return useMutation({
+		mutationFn: (email: any) => AppwriteForotpassword(email),
+		onSuccess: async (data) => {
+			console.log(data);
+			return data;
+		},
+		onError: async (data) => {
+			return data;
+		},
+	});
+};
+// custom hook to call the confirm forgot password fucntion
+export const useConfirmPasswordRecovery = () => {
+	return useMutation({
+		mutationFn: (data: any) => AppwriteConfirmPasswordRecovery(data),
+		onSuccess: async (data) => {
+			console.log(data);
+			return data;
+		},
+		onError: async (data) => {
+			return data;
+		},
 	});
 };
 

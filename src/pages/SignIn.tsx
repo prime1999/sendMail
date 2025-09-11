@@ -9,6 +9,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { checkCurrentSession, GoogleAuth } from "@/lib/actions/AuthActions";
 import { useLogInUser } from "@/lib/actions/QueryActions";
 import FullPageLoader from "@/lib/utils/FullPageLoader";
+import ForgotpasswordModal from "@/components/ForgotpasswordModal";
 
 const SignIn = () => {
 	// react-query hooks
@@ -29,6 +30,8 @@ const SignIn = () => {
 	const [showPassword, setShowPassword] = useState<boolean>(false);
 	// state to handle the checking status of the session state
 	const [checkingStatus, setCheckingStatus] = useState<boolean>(true);
+	// state to handle the forgot-password modal
+	const [open, setOpen] = useState<boolean>(false);
 
 	const { email, password } = formData;
 	const { emailError, passwordError } = errorData;
@@ -91,6 +94,7 @@ const SignIn = () => {
 			console.log(error);
 		}
 	};
+
 	return (
 		<main
 			className="h-screen w-screen bg-cover bg-center"
@@ -190,6 +194,7 @@ const SignIn = () => {
 					<div className="w-full text-xs font-inter font-medium flex flex-col text-gray-500 items-center justify-center mt-2">
 						<button
 							type="button"
+							onClick={() => setOpen(true)}
 							className="cursor-pointer font-semibold duration-500 hover:text-gray-800"
 						>
 							forgot-password?
@@ -203,6 +208,7 @@ const SignIn = () => {
 					</div>
 				</form>
 			</div>
+			<ForgotpasswordModal open={open} setOpen={setOpen} />
 		</main>
 	);
 };
