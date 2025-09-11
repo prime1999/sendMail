@@ -27,7 +27,6 @@ const Dashboard = () => {
 	const streamRef = useRef<MediaStream | null>(null); // 🔥 store the stream
 	const [mediaBlob, setMediaBlob] = useState<Blob | null>(null);
 	const [videoUrl, setVideoUrl] = useState<any>(null);
-	const [recording, setRecording] = useState(false);
 	const [showRecording, setShowRecording] = useState(false);
 
 	const stopStream = (stream: MediaStream) => {
@@ -71,7 +70,6 @@ const Dashboard = () => {
 			mediaRecorderRef.current = recorder;
 			recorder.start();
 			setShowRecording(true);
-			setRecording(true);
 		} catch (err) {
 			console.error("Error starting recording:", err);
 		}
@@ -79,7 +77,7 @@ const Dashboard = () => {
 
 	const stopRecording = () => {
 		mediaRecorderRef.current?.stop();
-		setRecording(false);
+
 		// setShowRecording(false);
 	};
 
@@ -93,7 +91,6 @@ const Dashboard = () => {
 
 	// function to cancel a recording
 	const cancelRecording = () => {
-		setRecording(false);
 		setVideoUrl(null);
 		setStream(null);
 		setShowRecording(false);

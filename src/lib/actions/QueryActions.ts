@@ -1,18 +1,15 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import {
 	AppwriteConfirmPasswordRecovery,
 	AppwritecreateUser,
 	AppwriteCreateUserSession,
 	AppwriteForotpassword,
-	AppwriteLogUserOut,
 } from "./AuthActions";
-import { AppwriteCreateUserProfile } from "./StudentAction";
+
 import { AppwriteCreateMail, UploadFileToCloud } from "./FileActions";
 
 // Custom hook for creating a user
 export const useCreateUser = () => {
-	const queryClient = useQueryClient();
-
 	return useMutation({
 		mutationFn: ({ email, password }: { email: string; password: string }) =>
 			AppwritecreateUser({ email, password }),
@@ -29,8 +26,6 @@ export const useCreateUser = () => {
 
 // Custom hook for creating a user
 export const useLogInUser = () => {
-	const queryClient = useQueryClient();
-
 	return useMutation({
 		mutationFn: ({ email, password }: { email: string; password: string }) =>
 			AppwriteCreateUserSession({ email, password }),
@@ -65,7 +60,7 @@ export const useSendMailToAppwrite = () => {
 			console.log(data);
 			return data;
 		},
-		onError: async (data) => {},
+		onError: async () => {},
 	});
 };
 

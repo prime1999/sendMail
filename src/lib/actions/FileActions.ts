@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Account, ID, TablesDB } from "appwrite";
 import client from "../appwrite.config";
-import { DBID, USERID, MAILID } from "@/contants/env.file";
+import { DBID, MAILID } from "@/contants/env.file";
 
 const account = new Account(client);
 
