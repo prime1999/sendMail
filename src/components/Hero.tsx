@@ -58,24 +58,37 @@ const Hero = () => {
 			});
 		});
 
+		gsap.from(".small-button", {
+			opacity: 0,
+			xPercent: 40,
+			duration: 2,
+			ease: "power1.inOut",
+		});
+
 		// Refresh to calculate positions
 		ScrollTrigger.refresh();
 	}, []);
 
 	return (
-		<section className="hero flex items-center justify-between w-8/12 mx-auto mt-8 pt-8">
+		<section className="hero flex flex-col-reverse items-center justify-between w-8/12 mx-auto mt-8 pt-8 md:flex-row">
 			<div>
-				<h1 className="title leading-normal font-ubuntu text-4xl">
+				<h1 className="title hidden leading-normal font-ubuntu text-4xl md:block">
 					A gift from your <span className="font-semibold">Past,</span> <br />
 					Delivered to your <span className="font-semibold">Future.</span>
 				</h1>
-				<p className="para max-w-[400px] mt-4 font-inter text-sm">
+				<p className="para hidden max-w-[400px] mt-4 font-inter text-sm md:block">
 					Write heartfelt messages, goals, or reminders to yourself. Set a date,
 					and your future self will receive them like a time capsule.
 				</p>
 				<button
 					onClick={() => navigate("/signIn")}
-					className="button py-2 px-4 button-gradient rounded-md mt-16"
+					className="small-button py-2 px-4 button-gradient rounded-md mt-8 md:hidden"
+				>
+					Send a mail to future you
+				</button>
+				<button
+					onClick={() => navigate("/signIn")}
+					className="button hidden py-2 px-4 button-gradient rounded-md mt-16 md:block"
 				>
 					Send a mail to future you
 				</button>

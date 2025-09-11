@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { MdOutlineEmail } from "react-icons/md";
-import { MdCancel } from "react-icons/md";
 import {
 	Dialog,
 	DialogContent,

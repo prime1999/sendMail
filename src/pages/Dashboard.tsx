@@ -142,9 +142,9 @@ const Dashboard = () => {
 			style={{
 				backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.6), rgba(159, 75, 236, 0.6)), url(${dashboardLady})`,
 			}}
-			className="h-screen bg-contain bg-center bg-[rgb(128, 18, 231)] bg-no-repeat bg-purple-200 pt-6"
+			className="fixed inset-0 overflow-hidden bg-cover bg-center bg-no-repeat bg-purple-200 pt-6 lg:bg-contain"
 		>
-			<nav className="w-9/12 mx-auto flex items-center justify-between font-inter text-xs font-medium">
+			<nav className="w-11/12 mx-auto flex items-center justify-between font-inter text-xs font-medium md:w-9/12">
 				<Logo />
 				<div className="flex items-center gap-4">
 					<button
@@ -164,13 +164,13 @@ const Dashboard = () => {
 					<FaBell />
 				</button>
 			</nav>
-			<div className="w-9/12 mx-auto flex items-start justify-between">
-				<div className="mt-16">
-					<h1 className="font-ubuntu text-5xl">
+			<div className="w-9/12 mx-auto flex flex-col items-start justify-between md:flex-row">
+				<div className="mt-16 flex gap-4 items-center md:block">
+					<h1 className="font-ubuntu text-6xl md:text-5xl">
 						Talk to the <br />
 						<span className="font-semibold text-purple-600">Future</span> You
 					</h1>
-					<div className="mt-16 flex flex-col gap-8">
+					<div className="flex flex-col gap-8 md:mt-16">
 						<button className="glassmorphism bg-white/20 border border-white/30 p-2 w-9 text-xl text-purple-800 cursor-pointer">
 							<MdOutlineFeedback />
 						</button>

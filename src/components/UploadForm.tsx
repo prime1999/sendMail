@@ -97,7 +97,7 @@ const UploadForm = ({
 	};
 
 	return (
-		<main className="w-96 glassmorphism bg-white/20 border border-white/30 p-4">
+		<main className="w-80 glassmorphism bg-white/20 border border-white/30 p-4 lg:w-96">
 			<h3 className="font-inter font-medium text-sm">
 				Send a Message to the future
 			</h3>

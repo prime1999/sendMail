@@ -100,7 +100,7 @@ const Register = () => {
 			<div className="absolute inset-0 bg-white/70"></div>
 
 			<div className="relative flex items-center justify-center w-full h-full">
-				<form className="w-1/5">
+				<form className="w-4/5 md:w-2/5 lg:w-1/5">
 					<div className="flex flex-col items-center justify-center font-ubuntu">
 						<Logo />
 						<h2 className="text-2xl">Welcome to SendMail</h2>

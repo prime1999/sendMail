@@ -9,9 +9,11 @@ const HomePage = () => {
 		<main>
 			<Navbar />
 			<Hero />
-			<HomeSecondSection />
-			<HomeThirdSection />
-			<HomeLastSection />
+			<div className="w-full hidden md:block">
+				<HomeSecondSection />
+				<HomeThirdSection />
+				<HomeLastSection />
+			</div>
 		</main>
 	);
 };
