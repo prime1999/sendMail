@@ -5,16 +5,38 @@ import { FaVideo } from "react-icons/fa6";
 import { FaRegImages } from "react-icons/fa";
 import { LuAudioLines } from "react-icons/lu";
 import { MdCancel } from "react-icons/md";
-import { useUploadFileToCloud } from "@/lib/actions/QueryActions";
+import {
+	useSendMailToAppwrite,
+	useUploadFileToCloud,
+} from "@/lib/actions/QueryActions";
+import { SendDate } from "./SendDate";
 
-const UploadForm = () => {
+type Props = {
+	progress: string;
+	setProgress: any;
+	fileData: any;
+	setFileData: any;
+};
+
+const UploadForm = ({
+	progress,
+	setProgress,
+	fileData,
+	setFileData,
+}: Props) => {
 	const uploadFile = useUploadFileToCloud();
+	const sendMail = useSendMailToAppwrite();
+	// state to handle the formData
+	const [formData, setFormData] = useState<any>({
+		title: "",
+		message: "",
+	});
 	// ref to handle the file input
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
-	// state to handle the progress
-	const [progress, setProgress] = useState<string>("");
-	// state to handle the uploaded file data
-	const [fileData, setFileData] = useState<any>([]);
+
+	const [date, setDate] = useState<Date | undefined>(undefined);
+
+	const { title, message } = formData;
 
 	// function to handle the click function for the upload
 	const handleClick = () => {
@@ -29,7 +51,6 @@ const UploadForm = () => {
 			// call the react query function
 			uploadFile.mutate(dataToSend, {
 				onSuccess: (data: any) => {
-					console.log(data);
 					// set the progress to 0
 					setProgress("");
 					setFileData(data);
@@ -40,7 +61,41 @@ const UploadForm = () => {
 			});
 		}
 	};
-	console.log(progress);
+
+	// function to send the mail
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault();
+
+		try {
+			// Extract URLs from fileData
+			const fileUrl = fileData.map((file: any) => file.url);
+
+			// Data to send to backend
+			const dataToSend = {
+				message,
+				fileUrl,
+				sendTime: date,
+			};
+
+			// Call the React Query mutation
+			sendMail.mutate(dataToSend, {
+				onSuccess: (response: any) => {
+					console.log("Upload success:", response);
+
+					// Optionally reset form
+					setProgress("");
+					setFileData([]);
+					setDate(undefined);
+				},
+				onError: (error) => {
+					console.error("Error sending mail:", error);
+				},
+			});
+		} catch (error) {
+			console.error("Unexpected error:", error);
+		}
+	};
+
 	return (
 		<main className="w-96 glassmorphism bg-white/20 border border-white/30 p-4">
 			<h3 className="font-inter font-medium text-sm">
@@ -50,10 +105,24 @@ const UploadForm = () => {
 				<input
 					type="text"
 					placeholder="Title"
+					value={title}
+					onChange={(e) =>
+						setFormData((prev: any) => ({
+							...prev,
+							title: e.target.value,
+						}))
+					}
 					className="border-b border-gray-400 w-full font-inter text-sm text-gray-500 py-1 focus:outline-0"
 				/>
 				<textarea
 					placeholder="Message"
+					value={message}
+					onChange={(e) =>
+						setFormData((prev: any) => ({
+							...prev,
+							message: e.target.value,
+						}))
+					}
 					className="mt-4 border-b border-gray-400 w-full font-inter text-sm text-gray-500 py-1 focus:outline-0"
 				></textarea>
 				<div className="flex items-center gap-2 mt-2">
@@ -70,7 +139,11 @@ const UploadForm = () => {
 						className="hidden"
 						onChange={(e) => handleFileChange(e)}
 					/>
-					<button className="flex items-center gap-2 font-inter text-sm text-white/80 font-medium bg-purple-400 rounded-md px-4 py-2 cursor-pointer duration-500 hover:bg-purple-500">
+					<button
+						type="submit"
+						onClick={(e) => handleSubmit(e)}
+						className="flex items-center gap-2 font-inter text-sm text-white/80 font-medium bg-purple-400 rounded-md px-4 py-2 cursor-pointer duration-500 hover:bg-purple-500"
+					>
 						Send{" "}
 						<span className="mt-1">
 							<IoIosSend />
@@ -88,20 +161,30 @@ const UploadForm = () => {
 			)}
 			<div className="mt-4 max-w-full overflow-x-auto rounded-lg p-2 scrollable-div">
 				<div className="flex gap-4">
-					{[...Array(20)].map((_, i) => (
-						<div
-							key={i}
-							className="relative h-18 flex-shrink-0 flex flex-col items-center justify-center"
-						>
-							<FaRegImages className="text-3xl text-purple-800" />
-							<p className="truncate w-18 font-inter text-xs">file-{i + 1}</p>
-							<button className="absolute top-2 right-2 cursor-pointer">
-								<MdCancel className="text-purple-500 cursor-pointer duration-500 hover:text-purple-800" />
-							</button>
-						</div>
-					))}
+					{fileData.length > 0 &&
+						fileData.map((file: any, i: number) => (
+							<div
+								key={i}
+								className="relative h-18 flex-shrink-0 flex flex-col items-center justify-center"
+							>
+								{file.resource_type === "image" ? (
+									<FaRegImages className="text-3xl text-purple-800" />
+								) : file.resource_type === "video" ? (
+									<FaVideo />
+								) : (
+									<LuAudioLines className="text-3xl text-purple-800" />
+								)}
+								<p className="truncate w-18 font-inter text-xs">
+									{file.display_name}
+								</p>
+								<button className="absolute top-2 right-2 cursor-pointer">
+									<MdCancel className="text-purple-500 cursor-pointer duration-500 hover:text-purple-800" />
+								</button>
+							</div>
+						))}
 				</div>
 			</div>
+			<SendDate date={date} setDate={setDate} />
 		</main>
 	);
 };

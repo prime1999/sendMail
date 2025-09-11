@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AppwritecreateUser, AppwriteCreateUserSession } from "./AuthActions";
 import { AppwriteCreateUserProfile } from "./StudentAction";
-import { UploadFileToCloud } from "./FileActions";
+import { AppwriteCreateMail, UploadFileToCloud } from "./FileActions";
 
 // Custom hook for creating a user
 export const useCreateUser = () => {
@@ -44,6 +44,17 @@ export const useUploadFileToCloud = () => {
 	return useMutation({
 		mutationFn: (data: any) => UploadFileToCloud(data),
 		onSuccess: async (data) => {
+			return data;
+		},
+		onError: async (data) => {},
+	});
+};
+// Custom hook for sending for sending a file to appwrite DB
+export const useSendMailToAppwrite = () => {
+	return useMutation({
+		mutationFn: (data: any) => AppwriteCreateMail(data),
+		onSuccess: async (data) => {
+			console.log(data);
 			return data;
 		},
 		onError: async (data) => {},

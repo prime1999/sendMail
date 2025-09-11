@@ -1,10 +1,113 @@
+import { useEffect, useRef, useState } from "react";
 import { FaBell } from "react-icons/fa";
 import { MdOutlineFeedback, MdLogout } from "react-icons/md";
 import Logo from "@/components/Logo";
 import dashboardLady from "../assets/images/dashboardLady.png";
 import UploadForm from "@/components/UploadForm";
+import Recording from "@/components/Recording";
+import { useUploadFileToCloud } from "@/lib/actions/QueryActions";
 
 const Dashboard = () => {
+	// state for react-query
+	const uploadFile = useUploadFileToCloud();
+	// state to hadle the uplao progress
+	const [progress, setProgress] = useState<string>("");
+	// state to handle the uploaded file data
+	const [fileData, setFileData] = useState<any>([]);
+	const videoRef = useRef<HTMLVideoElement | null>(null);
+	const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+	const [stream, setStream] = useState<any>(null);
+	const streamRef = useRef<MediaStream | null>(null); // 🔥 store the stream
+	const [mediaBlob, setMediaBlob] = useState<Blob | null>(null);
+	const [videoUrl, setVideoUrl] = useState<any>(null);
+	const [recording, setRecording] = useState(false);
+	const [showRecording, setShowRecording] = useState(false);
+
+	const stopStream = (stream: MediaStream) => {
+		stream.getTracks().forEach((track) => track.stop());
+	};
+
+	// function to start recordin te live video
+	const startRecording = async (type: "video" | "audio") => {
+		try {
+			const constraints =
+				type === "video" ? { video: true, audio: true } : { audio: true };
+
+			const stream = await navigator.mediaDevices.getUserMedia(constraints);
+			// store for later use
+			streamRef.current = stream;
+
+			setStream(stream);
+
+			const recorder = new MediaRecorder(stream);
+			const chunks: Blob[] = [];
+
+			recorder.ondataavailable = (e) => {
+				if (e.data.size > 0) chunks.push(e.data);
+			};
+
+			recorder.onstop = () => {
+				const blob = new Blob(chunks, {
+					type: type === "video" ? "video/webm" : "audio/webm",
+				});
+				setMediaBlob(blob);
+				stopStream(stream);
+				if (blob) {
+					// Create a preview URL
+					const previewUrl = URL.createObjectURL(blob);
+
+					// Store this in state for your <video>
+					setVideoUrl(previewUrl);
+				}
+			};
+
+			mediaRecorderRef.current = recorder;
+			recorder.start();
+			setShowRecording(true);
+			setRecording(true);
+		} catch (err) {
+			console.error("Error starting recording:", err);
+		}
+	};
+
+	const stopRecording = () => {
+		mediaRecorderRef.current?.stop();
+		setRecording(false);
+		// setShowRecording(false);
+	};
+
+	// Ensure srcObject is always set when modal opens
+	useEffect(() => {
+		if (showRecording && videoRef.current && streamRef.current) {
+			videoRef.current.srcObject = streamRef.current;
+			videoRef.current.play().catch(console.error);
+		}
+	}, [showRecording]);
+
+	// function to cancel a recording
+	const cancelRecording = () => {
+		setRecording(false);
+		setVideoUrl(null);
+		setStream(null);
+		setShowRecording(false);
+	};
+
+	// function to upload te recording to cloudinary
+	const uploadRecording = () => {
+		const dataToSend = { file: [mediaBlob], setProgress };
+		setShowRecording(false);
+		// call the react query function
+		uploadFile.mutate(dataToSend, {
+			onSuccess: (data: any) => {
+				// set the progress to 0
+				setProgress("");
+				setFileData((prev: any) => [...prev, ...data]);
+			},
+			onError: (error) => {
+				console.error("Error creating user:", error);
+			},
+		});
+	};
 	return (
 		<main
 			style={{
@@ -15,13 +118,16 @@ const Dashboard = () => {
 			<nav className="w-9/12 mx-auto flex items-center justify-between font-inter text-xs font-medium">
 				<Logo />
 				<div className="flex items-center gap-4">
-					<button className="glassmorphism bg-white/20 border border-white/30 py-2 px-4 duration-500 cursor-pointer hover:text-purple-700">
-						Send Message
-					</button>
-					<button className="glassmorphism bg-white/20 border border-white/30 py-2 px-4 duration-500 cursor-pointer hover:text-purple-700">
+					<button
+						onClick={() => startRecording("video")}
+						className="glassmorphism bg-white/20 border border-white/30 py-2 px-4 duration-500 cursor-pointer hover:text-purple-700"
+					>
 						Record a video
 					</button>
-					<button className="glassmorphism bg-white/20 border border-white/30 py-2 px-4 duration-500 cursor-pointer hover:text-purple-700">
+					<button
+						onClick={() => startRecording("audio")}
+						className="glassmorphism bg-white/20 border border-white/30 py-2 px-4 duration-500 cursor-pointer hover:text-purple-700"
+					>
 						Record an audio
 					</button>
 				</div>
@@ -29,23 +135,38 @@ const Dashboard = () => {
 					<FaBell />
 				</button>
 			</nav>
-			<div className="mt-16 w-9/12 mx-auto">
-				<h1 className="font-ubuntu text-5xl">
-					Talk to the <br />
-					<span className="font-semibold text-purple-600">Future</span> You
-				</h1>
+			<div className="w-9/12 mx-auto flex items-start justify-between">
+				<div className="mt-16">
+					<h1 className="font-ubuntu text-5xl">
+						Talk to the <br />
+						<span className="font-semibold text-purple-600">Future</span> You
+					</h1>
+					<div className="mt-16 flex flex-col gap-8">
+						<button className="glassmorphism bg-white/20 border border-white/30 p-2 w-9 text-xl text-purple-800 cursor-pointer">
+							<MdOutlineFeedback />
+						</button>
+						<button className="glassmorphism bg-white/20 border border-white/30 p-2 w-9 text-xl text-purple-800 cursor-pointer">
+							<MdLogout />
+						</button>
+					</div>
+				</div>
+				<div className="mt-16">
+					<UploadForm
+						progress={progress}
+						setProgress={setProgress}
+						fileData={fileData}
+						setFileData={setFileData}
+					/>
+				</div>
 			</div>
-			<div className="absolute top-25 right-30">
-				<UploadForm />
-			</div>
-			<div className="relative left-40 top-20 flex flex-col gap-8">
-				<button className="glassmorphism bg-white/20 border border-white/30 p-2 w-9 text-xl text-purple-800 cursor-pointer">
-					<MdOutlineFeedback />
-				</button>
-				<button className="glassmorphism bg-white/20 border border-white/30 p-2 w-9 text-xl text-purple-800 cursor-pointer">
-					<MdLogout />
-				</button>
-			</div>
+			<Recording
+				open={showRecording}
+				stopRecording={stopRecording}
+				cancelRecording={cancelRecording}
+				stream={stream}
+				videoUrl={videoUrl}
+				uploadRecording={uploadRecording}
+			/>
 		</main>
 	);
 };
