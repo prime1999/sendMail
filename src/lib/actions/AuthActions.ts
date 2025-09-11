@@ -99,3 +99,18 @@ export const AppwriteCreateUserSession = async (userData: any) => {
 		console.log(error);
 	}
 };
+
+// function to log a user out
+export const AppwriteLogUserOut = async () => {
+	try {
+		// get the current session
+		const res = await checkCurrentSession();
+		console.log(res);
+		if (res && res.$id) {
+			await account.deleteSession({ sessionId: "current" });
+		}
+	} catch (error) {
+		console.log(error);
+		return error;
+	}
+};

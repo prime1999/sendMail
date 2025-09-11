@@ -1,5 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AppwritecreateUser, AppwriteCreateUserSession } from "./AuthActions";
+import {
+	AppwritecreateUser,
+	AppwriteCreateUserSession,
+	AppwriteLogUserOut,
+} from "./AuthActions";
 import { AppwriteCreateUserProfile } from "./StudentAction";
 import { AppwriteCreateMail, UploadFileToCloud } from "./FileActions";
 
@@ -46,7 +50,9 @@ export const useUploadFileToCloud = () => {
 		onSuccess: async (data) => {
 			return data;
 		},
-		onError: async (data) => {},
+		onError: async (data) => {
+			console.log(data);
+		},
 	});
 };
 // Custom hook for sending for sending a file to appwrite DB
@@ -60,6 +66,17 @@ export const useSendMailToAppwrite = () => {
 		onError: async (data) => {},
 	});
 };
+
+// // custom hook for logging a user out
+// export const useLoguserOut = () => {
+// 	return useMutation({
+// 		mutationFn: () => AppwriteLogUserOut(),
+// 		onSuccess: async () => {},
+// 		onError: async (data) => {
+// 			console.log(data);
+// 		},
+// 	});
+// };
 
 // // custom hook for creating the user profile
 // export const userCreateUserProfile = () => {

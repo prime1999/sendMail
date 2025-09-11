@@ -1,15 +1,22 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaBell } from "react-icons/fa";
 import { MdOutlineFeedback, MdLogout } from "react-icons/md";
 import Logo from "@/components/Logo";
 import dashboardLady from "../assets/images/dashboardLady.png";
 import UploadForm from "@/components/UploadForm";
 import Recording from "@/components/Recording";
-import { useUploadFileToCloud } from "@/lib/actions/QueryActions";
+import {
+	// useLoguserOut,
+	useUploadFileToCloud,
+} from "@/lib/actions/QueryActions";
+import { AppwriteLogUserOut } from "@/lib/actions/AuthActions";
 
 const Dashboard = () => {
+	const navigate = useNavigate();
 	// state for react-query
 	const uploadFile = useUploadFileToCloud();
+	//const logUserOut = useLoguserOut();
 	// state to hadle the uplao progress
 	const [progress, setProgress] = useState<string>("");
 	// state to handle the uploaded file data
@@ -108,6 +115,28 @@ const Dashboard = () => {
 			},
 		});
 	};
+
+	// function to log a user out
+	const logOutUser = async () => {
+		// call the react query function
+		// logUserOut.mutate({
+		// 	onSuccess: (data: any) => {
+		// 		// set the progress to 0
+		// 		setProgress("");
+		// 		setFileData((prev: any) => [...prev, ...data]);
+		// 	},
+		// 	onError: (error) => {
+		// 		console.error("Error creating user:", error);
+		// 	},
+		// });
+		try {
+			// call te funciton
+			await AppwriteLogUserOut();
+			navigate("/signIn");
+		} catch (error) {
+			console.log(error);
+		}
+	};
 	return (
 		<main
 			style={{
@@ -145,7 +174,11 @@ const Dashboard = () => {
 						<button className="glassmorphism bg-white/20 border border-white/30 p-2 w-9 text-xl text-purple-800 cursor-pointer">
 							<MdOutlineFeedback />
 						</button>
-						<button className="glassmorphism bg-white/20 border border-white/30 p-2 w-9 text-xl text-purple-800 cursor-pointer">
+						<button
+							type="button"
+							onClick={() => logOutUser()}
+							className="glassmorphism bg-white/20 border border-white/30 p-2 w-9 text-xl text-purple-800 cursor-pointer"
+						>
 							<MdLogout />
 						</button>
 					</div>
