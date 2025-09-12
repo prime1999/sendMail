@@ -7,7 +7,7 @@ const HomeLastSection = () => {
 	return (
 		<footer className="w-full mt-8 py-8">
 			{" "}
-			<div className="w-8/12 flex flex-col items-center justify-center mx-auto rounded-xl my-8 shadow-sm p-4">
+			<div className="w-8/12 flex flex-col items-center justify-center mx-auto rounded-xl my-8 bg-white/30 p-4">
 				<Logo />
 				<ul className="flex items-center justify-center gap-8 text-sm font-inter font-semibold mt-4">
 					{navLinks.map((link: any) => (

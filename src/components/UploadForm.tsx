@@ -10,6 +10,7 @@ import {
 	useUploadFileToCloud,
 } from "@/lib/actions/QueryActions";
 import { SendDate } from "./SendDate";
+import Spinner from "./Spinner";
 
 type Props = {
 	progress: string;
@@ -144,7 +145,7 @@ const UploadForm = ({
 						onClick={(e) => handleSubmit(e)}
 						className="flex items-center gap-2 font-inter text-sm text-white/80 font-medium bg-purple-400 rounded-md px-4 py-2 cursor-pointer duration-500 hover:bg-purple-500"
 					>
-						Send{" "}
+						{sendMail.isPending ? <Spinner /> : "Send"}
 						<span className="mt-1">
 							<IoIosSend />
 						</span>

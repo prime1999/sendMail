@@ -13,8 +13,8 @@ export const GoogleAuth = async (currentUrl: string) => {
 		// register/sign in the user using oauth
 		account.createOAuth2Session({
 			provider: OAuthProvider.Google,
-			success: "http://localhost:5173/dashboard",
-			failure: `http://localhost:5173/${currentUrl}`,
+			success: "https://send-mail-pink.vercel.app/dashboard",
+			failure: `https://send-mail-pink.vercel.app/${currentUrl}`,
 		});
 	} catch (error) {
 		console.log(error);
@@ -121,7 +121,7 @@ export const AppwriteForotpassword = async (email: string) => {
 		// call the forgot password function
 		const token = await account.createRecovery({
 			email: email,
-			url: "http://localhost:5173/forgotpassword",
+			url: "https://send-mail-pink.vercel.app/forgotpassword",
 		});
 		console.log(token);
 		return token;

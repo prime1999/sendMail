@@ -5,6 +5,7 @@ import Logo from "@/components/Logo";
 import background from "../assets/images/fromBg.jpg";
 import { useConfirmPasswordRecovery } from "@/lib/actions/QueryActions";
 import { useLocation } from "react-router-dom";
+import Spinner from "@/components/Spinner";
 
 const ForgotPassword = () => {
 	// react-router
@@ -107,7 +108,7 @@ const ForgotPassword = () => {
 							onClick={(e) => handleSubmit(e)}
 							className="w-full button-gradient p-2 rounded-md mt-4 font-inter font-medium text-xs"
 						>
-							Continue
+							{confirmPassword.isPending ? <Spinner /> : "Continue"}
 						</button>
 					</div>
 				</form>
