@@ -3,8 +3,8 @@ import video from "../assets/images/video.png";
 import text from "../assets/images/text.png";
 
 export const navLinks = [
-	{ id: 1, name: "Mails", value: "mails" },
-	{ id: 2, name: "Give-Feedback", value: "give-feedBack" },
+	{ id: 1, name: "Mails", value: "signIn" },
+	{ id: 2, name: "Give-Feedback", value: "/" },
 ];
 
 export const heroMessage = [
