@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { toast } from "sonner";
 import { TiAttachmentOutline } from "react-icons/ti";
 import { IoIosSend } from "react-icons/io";
 import { FaVideo } from "react-icons/fa6";
@@ -11,6 +12,7 @@ import {
 } from "@/lib/actions/QueryActions";
 import { SendDate } from "./SendDate";
 import Spinner from "./Spinner";
+import Alert from "./Alert";
 
 type Props = {
 	progress: string;
@@ -71,6 +73,11 @@ const UploadForm = ({
 			// Extract URLs from fileData
 			const fileUrl = fileData.map((file: any) => file.url);
 
+			if (date === undefined) {
+				toast("Send date required");
+				return;
+			}
+
 			// Data to send to backend
 			const dataToSend = {
 				message,
@@ -81,9 +88,9 @@ const UploadForm = ({
 			// Call the React Query mutation
 			sendMail.mutate(dataToSend, {
 				onSuccess: (response: any) => {
-					console.log("Upload success:", response);
-
+					toast(response.msg);
 					// Optionally reset form
+					setFormData({ title: "", message: "" });
 					setProgress("");
 					setFileData([]);
 					setDate(undefined);
@@ -186,6 +193,7 @@ const UploadForm = ({
 				</div>
 			</div>
 			<SendDate date={date} setDate={setDate} />
+			<Alert />
 		</main>
 	);
 };

@@ -52,7 +52,6 @@ export const UploadFileToCloud = async (dataSent: {
 // function to create the mail in the Appwrite DB
 export const AppwriteCreateMail = async (mailData: any) => {
 	try {
-		console.log(mailData);
 		// get the current user's email
 		const user = await account.get();
 		if (!user || !user.$id) {
@@ -74,8 +73,7 @@ export const AppwriteCreateMail = async (mailData: any) => {
 			data,
 		});
 		if (res) {
-			console.log(res);
-			return data;
+			return { msg: "Mail scheduled", data };
 		}
 	} catch (error) {
 		console.log(error);
