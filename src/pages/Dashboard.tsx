@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import { useNavigate } from "react-router-dom";
 import { FaBell } from "react-icons/fa";
 import { MdOutlineFeedback, MdLogout } from "react-icons/md";
@@ -28,6 +30,34 @@ const Dashboard = () => {
 	const [mediaBlob, setMediaBlob] = useState<Blob | null>(null);
 	const [videoUrl, setVideoUrl] = useState<any>(null);
 	const [showRecording, setShowRecording] = useState(false);
+
+	useGSAP(() => {
+		gsap.from(".nav", {
+			opacity: 0,
+			yPercent: -40,
+			duration: 1,
+			ease: "power1.inOut",
+			stagger: 0.3,
+		});
+		gsap.from(".form", {
+			opacity: 0,
+			yPercent: 50,
+			duration: 1.5,
+			ease: "power1.inOut",
+		});
+		gsap.from(".heading", {
+			xPercent: -50,
+			duration: 1,
+			ease: "power1.inOut",
+		});
+		gsap.from(".btn", {
+			opacity: 0,
+			xPercent: 50,
+			duration: 1.5,
+			ease: "power1.inOut",
+			stagger: 0.5,
+		});
+	}, []);
 
 	const stopStream = (stream: MediaStream) => {
 		stream.getTracks().forEach((track) => track.stop());
@@ -141,9 +171,9 @@ const Dashboard = () => {
 			}}
 			className="fixed inset-0 overflow-hidden bg-cover bg-center bg-no-repeat bg-purple-200 pt-6 lg:bg-contain"
 		>
-			<nav className="w-11/12 mx-auto flex items-center justify-between font-inter text-xs font-medium md:w-9/12">
+			<nav className="nav w-11/12 mx-auto flex items-center justify-between font-inter text-xs font-medium md:w-9/12">
 				<Logo />
-				<div className="flex items-center gap-4">
+				<div className="nav flex items-center gap-4">
 					<button
 						onClick={() => startRecording("video")}
 						className="glassmorphism bg-white/20 border border-white/30 py-2 px-4 duration-500 cursor-pointer hover:text-purple-700"
@@ -163,24 +193,24 @@ const Dashboard = () => {
 			</nav>
 			<div className="w-9/12 mx-auto flex flex-col items-start justify-between md:flex-row">
 				<div className="mt-16 flex gap-4 items-center md:block">
-					<h1 className="font-ubuntu text-6xl md:text-5xl">
+					<h1 className="heading font-ubuntu text-6xl md:text-5xl">
 						Talk to the <br />
 						<span className="font-semibold text-purple-600">Future</span> You
 					</h1>
 					<div className="flex flex-col gap-8 md:mt-16">
-						<button className="glassmorphism bg-white/20 border border-white/30 p-2 w-9 text-xl text-purple-800 cursor-pointer">
+						<button className="btn glassmorphism bg-white/20 border border-white/30 p-2 w-9 text-xl text-purple-800 cursor-pointer">
 							<MdOutlineFeedback />
 						</button>
 						<button
 							type="button"
 							onClick={() => logOutUser()}
-							className="glassmorphism bg-white/20 border border-white/30 p-2 w-9 text-xl text-purple-800 cursor-pointer"
+							className="btn glassmorphism bg-white/20 border border-white/30 p-2 w-9 text-xl text-purple-800 cursor-pointer"
 						>
 							<MdLogout />
 						</button>
 					</div>
 				</div>
-				<div className="mt-16">
+				<div className="form mt-16">
 					<UploadForm
 						progress={progress}
 						setProgress={setProgress}
